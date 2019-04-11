@@ -1,6 +1,6 @@
 # greedyRainbow
 
- [![CircleCI](https://circleci.com/gh/M1zz/greedyRainbow)](https://circleci.com/gh/M1zz/greedyRainbow)
+ [![CircleCI](https://circleci.com/gh/M1zz/greedyRainbow.svg?style=svg)](https://circleci.com/gh/M1zz/greedyRainbow)
 
  A git repository for greedyRainbow.
 
