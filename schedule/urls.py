@@ -8,5 +8,5 @@ from schedule.scheduler import controller
 
 urlpatterns = [
     path('ping', lambda r: HttpResponse('OK')),
-    path('insert', controller.isInsertable),
+    #path('insert', controller.Controller.),
 ]
