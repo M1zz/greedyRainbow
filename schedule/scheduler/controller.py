@@ -1,5 +1,5 @@
 import datetime as dt
-
+from schedule.models import Tasks
 
 class Controller():
 
@@ -119,7 +119,23 @@ class Controller():
         return tasks
 
 
+    def insert_to_db(self,task):
+        username = "hyunho"
+        start_time = task[0]
+        end_time = task[1]
+        t = Tasks(username=username,task_start=start_time,task_end=end_time)
+        t.save()
+
+
 """
+
+   def select(self):
+        '''
+        temporary data
+        '''
+        username = "hyunho"
+        return user_data
+        
     def sort_task(self,task_data):
         tasks = []
         for task in task_data:

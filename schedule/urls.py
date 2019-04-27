@@ -9,5 +9,7 @@ from schedule.scheduler import controller
 urlpatterns = [
     path('ping', lambda r: HttpResponse('OK')),
     path('', views.select_schedule),
+    path('insert', views.insert_to_db),
+
     #path('insert', controller.Controller.),
 ]
