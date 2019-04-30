@@ -7,7 +7,7 @@ class Controller():
         start = dt.datetime.strptime(single_task[0], "%Y-%m-%d %H:%M")
         end = dt.datetime.strptime(single_task[1], "%Y-%m-%d %H:%M")
 
-        time_length = (end - start).seconds / 60
+        time_length = (end - start).total_seconds() / 60
 
         return time_length
 

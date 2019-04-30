@@ -1,19 +1,36 @@
 <html>
 <head>
     <title>Gtreedy rainbow</title>
+    <style>
+        .table-container {
+            overflow-x: scroll;
+        }
+    </style>
 </head>
 <body>
-Hello {{ name }}!
+<h1 align="center">욕망의 무지개</h1>
+<br>
+<div class="table-container" align="center">
+    {% load mathfilters %}
+    {% load index %}
 
-<table border="1">
-    {% for i in row %}
-        <tr>
-        {% for i in col %}
-        <th></th>
+    <table border="1">
+        {% for i in row %}
+            <tr>
+                {% for j in col %}
+                    {% with temp=pieces|mul:i %}
+                        {% with num=j|add:temp %}
+                            {% if arr|search_index:num == 1 %}
+                                <th>■</th>
+                            {% else %}
+                                <th>□</th>
+                            {% endif %}
+                        {% endwith %}
+                    {% endwith %}
+                {% endfor %}
+            </tr>
         {% endfor %}
-        </tr>
-    {% endfor %}
-</table>
-
+    </table>
+</div>
 </body>
 </html>
