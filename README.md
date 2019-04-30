@@ -19,4 +19,5 @@ $ python manage.py migrate
 $ python manage.py runserver
 ```
 
-ㄱ
+TODO Connect DB
+Draw rainbow
