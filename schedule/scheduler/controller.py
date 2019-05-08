@@ -1,5 +1,5 @@
 import datetime as dt
-from schedule.models import Tasks
+from schedule.models import Task
 
 class Controller():
 
@@ -123,7 +123,7 @@ class Controller():
         username = "hyunho"
         start_time = task[0]
         end_time = task[1]
-        t = Tasks(username=username,task_start=start_time,task_end=end_time)
+        t = Task(username=username,task_start=start_time,task_end=end_time,is_deleted=0)
         t.save()
 
 

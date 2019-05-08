@@ -1,18 +1,23 @@
 import datetime as dt
 
-from django.http import request
+from django.http import request, HttpResponseRedirect
 from django.shortcuts import render
 
 # Create your views here
+from django.views.decorators.csrf import csrf_protect
 
-from schedule.models import Tasks
+from schedule.models import Task \
+ \
+    # database
+from schedule.models import Task
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def select_schedule(request):
     name = "hyunho"
     # col = [i for i in range(0, 1488)]
-    start_point = '2019-04-16 00:00'
-    end_point = '2019-04-17 00:00'
+    start_point = '2019-04-01 00:00'
+    end_point = '2019-05-01 00:00'
 
     pieces = schedule_devider(start_point, end_point)  # 48
     max_tasks = 7
@@ -22,8 +27,11 @@ def select_schedule(request):
     arr = [0] * max_tasks * pieces
     x = [i for i in range(0, max_tasks * pieces)]
 
-    userdata = [["hyunho", 0, ["2019-04-16 10:00", "2019-04-16 12:00"], ["2019-04-16 13:00", "2019-04-16 15:00"], ["2019-04-16 18:00", "2019-04-16 22:30"]],
-                ["hyunho", 1, ["2019-04-16 09:30", "2019-04-16 10:30"]]]
+    userdata = [["hyunho", 0, ["2019-04-01 10:00", "2019-04-01 12:00"], ["2019-04-01 13:00", "2019-04-01 15:00"],
+                 ["2019-04-01 18:00", "2019-04-01 22:30"]],
+                ["hyunho", 1, ["2019-04-01 09:30", "2019-04-01 10:30"]]]
+    rowdata = select_userdata(name)
+
 
     task_data = []
 
@@ -88,11 +96,34 @@ def schedule_transform(task_data, pieces):
 
     return task_data
 
-
-def insert_to_db(self, task):
+#TODO : 입력받은 데이터를 이쁘게 넣기
+@csrf_protect
+def insert_to_db(request):
     username = "hyunho"
     start_time = '2019-04-16 10:00'
     end_time = '2019-04-16 13:00'
 
-    t = Tasks(username=username, task_start=start_time, task_end=end_time)
+    t = Task(username=username,
+             task_start=request.POST['task_start'],
+             task_end=request.POST['task_end'],
+             is_deleted=False
+             )
+    print(request.POST['task_start'], request.POST['task_end'])
     t.save()
+
+    url = '/schedule/'
+    return HttpResponseRedirect(url)
+
+
+#TODO : 저장이 되어있는 데이터를 이쁘게 불러오기
+'''
+1. where 조건으로 사용자의 모든 데이터 블러오기
+2. 불러온 데이터를 userdata 형태로 만들어 주기
+3. 데이터를 넘겨서 정상동작하는지 확인하기
+'''
+def select_userdata(name):
+    try:
+        user_datas = Task.objects.filter(username=name)
+
+    except ObjectDoesNotExist:
+        return ""

@@ -14,6 +14,14 @@
     {% load mathfilters %}
     {% load index %}
 
+  <table border=1 cellspacing=0 cellpadding=5>
+  <form name=writeform method=post action="/schedule/insert">{% csrf_token %}
+  <tr><td><b>일정시작</b></td><td><input type=datetime-local name=task_start value="2019-04-02T01:00"></td></tr>
+  <tr><td><b>일정종료</b></td><td><input type=datetime-local name=task_end value="2019-04-02T03:00">
+  <input type="submit" value="등록"></td></tr>
+  </form>
+  </table>
+
     <table border="1">
         {% for i in row %}
             <tr>
