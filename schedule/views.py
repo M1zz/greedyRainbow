@@ -6,9 +6,10 @@ from django.shortcuts import render
 # Create your views here
 from django.views.decorators.csrf import csrf_protect
 
-from schedule.models import Task \
- \
-    # database
+# own
+from schedule.scheduler import controller
+
+# database
 from schedule.models import Task
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -16,8 +17,8 @@ from django.core.exceptions import ObjectDoesNotExist
 def select_schedule(request):
     name = "hyunho"
     # col = [i for i in range(0, 1488)]
-    start_point = '2019-04-01 00:00'
-    end_point = '2019-05-01 00:00'
+    start_point = '2019-04-01 00:00:00'
+    end_point = '2019-05-01 00:00:00'
 
     pieces = schedule_devider(start_point, end_point)  # 48
     max_tasks = 7
@@ -27,11 +28,12 @@ def select_schedule(request):
     arr = [0] * max_tasks * pieces
     x = [i for i in range(0, max_tasks * pieces)]
 
-    userdata = [["hyunho", 0, ["2019-04-01 10:00", "2019-04-01 12:00"], ["2019-04-01 13:00", "2019-04-01 15:00"],
-                 ["2019-04-01 18:00", "2019-04-01 22:30"]],
-                ["hyunho", 1, ["2019-04-01 09:30", "2019-04-01 10:30"]]]
-    rowdata = select_userdata(name)
+    userdata = [
+        ["hyunho", 0, ["2019-04-01 10:00:00", "2019-04-01 12:00:00"], ["2019-04-01 13:00:00", "2019-04-01 15:00:00"],
+         ["2019-04-01 18:00:00", "2019-04-01 22:30:00"]],
+        ["hyunho", 1, ["2019-04-01 09:30:00", "2019-04-01 10:30:00"]]]
 
+    userdata = select_userdata(name)
 
     task_data = []
 
@@ -58,7 +60,7 @@ def select_schedule(request):
 
 
 def schedule_devider(start_point, end_point):
-    fmt = "%Y-%m-%d %H:%M"
+    fmt = "%Y-%m-%d %H:%M:%S"
 
     start = dt.datetime.strptime(start_point, fmt)
     end = dt.datetime.strptime(end_point, fmt)
@@ -69,7 +71,7 @@ def schedule_devider(start_point, end_point):
 
 
 def schedule_position(start_standard, start_point, line_num, pieces):
-    fmt = "%Y-%m-%d %H:%M"
+    fmt = "%Y-%m-%d %H:%M:%S"
 
     start = dt.datetime.strptime(start_standard, fmt)
     end = dt.datetime.strptime(start_point, fmt)
@@ -96,7 +98,8 @@ def schedule_transform(task_data, pieces):
 
     return task_data
 
-#TODO : 입력받은 데이터를 이쁘게 넣기
+
+# TODO : 입력받은 데이터를 이쁘게 넣기 -> 끝!
 @csrf_protect
 def insert_to_db(request):
     username = "hyunho"
@@ -115,15 +118,30 @@ def insert_to_db(request):
     return HttpResponseRedirect(url)
 
 
-#TODO : 저장이 되어있는 데이터를 이쁘게 불러오기
+# TODO : 저장이 되어있는 데이터를 이쁘게 불러오기
 '''
 1. where 조건으로 사용자의 모든 데이터 블러오기
 2. 불러온 데이터를 userdata 형태로 만들어 주기
 3. 데이터를 넘겨서 정상동작하는지 확인하기
 '''
+
+
 def select_userdata(name):
+    c = controller.Controller()
+
     try:
         user_datas = Task.objects.filter(username=name)
-
+        temp_data = []
+        for item in user_datas:
+            temp_task = []
+            temp_task.append(str(item.task_start))
+            temp_task.append(str(item.task_end))
+            print("temp_task", temp_task)
+            # temp_data.append(c.insert(item.username, temp_data, temp_task))
+            temp_data = c.insert(item.username, temp_data, temp_task)
+            print("temp_data", temp_data)
+            print(item.task_start, item.task_end)
+        return temp_data
     except ObjectDoesNotExist:
-        return ""
+        empty_list = []
+        return empty_list

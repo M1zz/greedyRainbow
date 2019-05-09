@@ -4,8 +4,9 @@ from schedule.models import Task
 class Controller():
 
     def get_time_length(self, single_task):
-        start = dt.datetime.strptime(single_task[0], "%Y-%m-%d %H:%M")
-        end = dt.datetime.strptime(single_task[1], "%Y-%m-%d %H:%M")
+        print("single_task",single_task)
+        start = dt.datetime.strptime(single_task[0], "%Y-%m-%d %H:%M:%S")
+        end = dt.datetime.strptime(single_task[1], "%Y-%m-%d %H:%M:%S")
 
         time_length = (end - start).total_seconds() / 60
 
@@ -33,7 +34,7 @@ class Controller():
 
         return True
 
-    def insert(self, user_data, insert_data):
+    def insert(self, username, user_data, insert_data):
 
         if user_data == []:
             username = "hyunho"
@@ -99,10 +100,11 @@ class Controller():
         return temp_user_data
 
     def update(self, user_data, origin_task, update_task):
+        username = "hyunho"
 
         user_data = self.remove_task(user_data, origin_task)
 
-        user_data = self.insert(user_data, update_task)
+        user_data = self.insert(username, user_data, update_task)
 
         return user_data
 
